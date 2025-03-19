@@ -1,0 +1,118 @@
+.sidebar {
+    width: 250px; /* Default width */
+    background-color: #5829ce;
+    color: #fff;
+    padding: 1rem;
+    transition: width 0.3s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Collapse button styles */
+  .collapse-button {
+    background-color: #3bdddf;
+    color: #000000;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    width: 5vh;
+    border-radius: 10%;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .collapse-button:hover{
+    background-color: rgb(66, 245, 46);
+  }
+  
+  /* Title styles */
+  .sidebar-title {
+    height: 35px;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    background-color: #3bdddf;
+    font-size: 18px;
+    font-weight: 20xp;
+    margin-bottom: 1rem;
+    
+    color: #000;
+    border: #3a3a3a solid 2px;
+    border-radius: 10px;
+  }
+  
+  /* Menu list styles */
+  .menu-list {
+    list-style-type: none;
+    padding-left: 0;
+    
+  }
+  
+  .menu-item {
+    margin-bottom: 1rem;
+  }
+  
+  /* Section button styles */
+  .section-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 0.7rem;
+    border: #f4d03f solid 2px;
+    border-radius: 15px;
+  }
+
+  .section-button:hover{
+    background-color: #d564dd;
+  }
+
+  
+  /* Submenu list styles */
+  .submenu-list {
+    list-style-type: none;
+    padding-left: 2rem;
+    margin-top: 10px;
+  }
+  
+  .submenu-item {
+    margin-bottom: 0.5rem;
+    padding: 0.7rem;
+    border: #f4d03f solid 2px;
+    border-radius: 15px;
+    display: inline-block;
+    width: 87%;
+    margin-right: 10px;
+    white-space: nowrap;
+  }
+  
+  .submenu-item a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .submenu-item:hover {
+    background-color: #d564dd;
+  }
+  
+  .submenu-item:hover a {
+    color: #fff; 
+  }
+  
+  .collapsed {
+    width: 40px;
+  }
+  
+
+
+
+
+   
