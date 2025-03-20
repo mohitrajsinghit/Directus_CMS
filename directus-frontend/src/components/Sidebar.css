@@ -25,7 +25,28 @@
   .collapse-button:hover{
     background-color: rgb(66, 245, 46);
   }
+
+
+
+  .seed-button{
+    background-color: #e6f42f;
+    color: #000000;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    width: 10vh;
+    margin-left:25px;
+    border-radius: 10%;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
   
+
+  .seed-button:hover{
+    background-color: rgb(66, 245, 46);
+  }
+
+
   /* Title styles */
   .sidebar-title {
     height: 35px;
@@ -111,8 +132,3 @@
     width: 40px;
   }
   
-
-
-
-
-   
