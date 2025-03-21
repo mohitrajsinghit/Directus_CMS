@@ -1,12 +1,13 @@
 .formContainer {
     width: 600px;
     border: 1px solid #ddd;
-    padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+    margin: 75px 55px;
     background-color: #f9f9f9;
+    padding: 20px; /* Add padding for better spacing */
 }
- 
+
 .back-button {
     background-color: #3498db;
     color: white;

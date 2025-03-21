@@ -11,6 +11,13 @@ body {
   height: 100vh;
 }
 
+.modal-overlay {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+
+
+
 .sidebar {
   width: 250px;
   background-color: #2a2a2a;

@@ -100,7 +100,7 @@
 
 
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { fetchMenuSections, fetchMenuItems } from "../api/directus";
 import "./Sidebar.css";
 
@@ -108,7 +108,6 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   const [openSections, setOpenSections] = useState({});
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -159,11 +158,6 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
           onClick={() => setIsCollapsed(!isCollapsed)}
         >
           {isCollapsed ? "→" : "X"}
-        </button>
-        
-        <button className="seed-button"
-          onClick={() => navigate("/seed-plan")}>
-          Seed
         </button>
       </div>
 
