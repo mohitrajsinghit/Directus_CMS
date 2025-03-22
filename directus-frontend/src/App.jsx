@@ -1,5 +1,6 @@
+// App.jsx
 import React from "react";
-import { BrowserRouter, Routes, Route, Link} from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { DirectusProvider } from "./context/DirectusContext";
 import Sidebar from "./components/Sidebar";
 import EmbedDashboard from "./components/EmbedDashboard";
@@ -9,6 +10,7 @@ import SalesAndMarginPlanning from "./pages/SalesMarginPlanningPage";
 import TDReconciliation from "./pages/TDReconciliationPage";
 import TDApprovalStatus from "./pages/TDApprovalStatusPage";
 import SeedPlanPage from "./pages/SeedPlanPage";
+import SurveyForm from "./pages/SurveyForm";
 import Navbar from "./components/Navbar";
 
 function App() {
@@ -17,10 +19,10 @@ function App() {
   return (
     <DirectusProvider>
       <BrowserRouter>
-      <Navbar />
+        <Navbar />
         <div style={{ display: "flex", height: "100vh" }}>
           <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
-          
+
           <main
             style={{
               flex: 1,
@@ -37,8 +39,8 @@ function App() {
               <Route path="/tdreconciliation" element={<TDReconciliation />} />
               <Route path="/tdapprovalstatus" element={<TDApprovalStatus />} />
               <Route path="/" element={<EmbedDashboard />} />
-              <Route path="/test" element={<EmbedDashboard />} />
-              <Route path="/seed-plan" element={<SeedPlanPage />} /> 
+              <Route path="/seed-plan" element={<SeedPlanPage />} />
+              <Route path="/survey" element={<SurveyForm />} />
             </Routes>
           </main>
         </div>

@@ -59,6 +59,29 @@
     background-color: rgb(66, 245, 46);
   }
 
+  
+  .survey-heading{
+    text-align: center;
+    font-family: Georgia, 'Times New Roman', Times, serif
+
+  }
+
+  .text-area{
+    
+  }
+  .survey-button{
+    background-color: #e6f42f;
+    color: #000000;
+    border: none;
+    border-radius: 10%;
+    padding: 0.5rem;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .survey-button:hover{
+    background-color: rgb(66, 245, 46);
+  }
 
 
   .seed-button{
@@ -68,7 +91,7 @@
     padding: 0.5rem;
     cursor: pointer;
     width: 10vh;
-    margin-left:25px;
+    margin-left:20px;
     margin-top:2px;
     border-radius: 10%;
     text-align: center;
