@@ -33,12 +33,12 @@ function App() {
             }}
           >
             <Routes>
+              <Route path="/" element={<EmbedDashboard />} />
               <Route path="/strategicsummary" element={<StrategicSummary />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/salesandmarginplanning" element={<SalesAndMarginPlanning />} />
               <Route path="/tdreconciliation" element={<TDReconciliation />} />
               <Route path="/tdapprovalstatus" element={<TDApprovalStatus />} />
-              <Route path="/" element={<EmbedDashboard />} />
               <Route path="/seed-plan" element={<SeedPlanPage />} />
               <Route path="/survey" element={<SurveyForm />} />
             </Routes>

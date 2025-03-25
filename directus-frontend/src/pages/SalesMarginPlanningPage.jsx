@@ -3,7 +3,7 @@ import axios from "axios";
 import { embedDashboard } from "@superset-ui/embedded-sdk";
 
 const supersetUrl = "http://localhost:9004";
-const dashboardId = "0f199dc6-6711-4870-8465-5d38fcf90da4";
+const dashboardId = "82ddaf15-df9e-4dfb-bc46-f8ad07b7d06d";
 
 async function getGuestToken() {
   try {

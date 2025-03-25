@@ -1,0 +1,205 @@
+import React, { useState, useEffect } from "react";
+import { createDirectus, rest, readItems, createItem } from "@directus/sdk";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import "./SurveyForm.css";
+
+// Initialize Directus client
+const directus = createDirectus("http://localhost:8055").with(rest());
+
+function SurveyForm({ closeModal }) {
+  const [questions, setQuestions] = useState([]); 
+  const [responses, setResponses] = useState({}); 
+  const [loading, setLoading] = useState(true);
+
+  // Fetch questions from Directus
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        setLoading(true);
+        const response = await directus.request(
+          readItems("survey_questions", {
+            fields: ["id", "question"],
+          })
+        );
+        console.log("Fetched questions:", response); 
+        setQuestions(response || []);
+      } catch (error) {
+        console.error("Error fetching questions:", error);
+        toast.error("Failed to load survey questions. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchQuestions();
+  }, []);
+
+  // Handle textarea changes
+  const handleResponseChange = (questionId, value) => {
+    setResponses((prevResponses) => ({ ...prevResponses, [questionId]: value }));
+  };
+
+
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Check if all questions have responses
+    const unansweredQuestions = questions.filter(q => !responses[q.id] || responses[q.id].trim() === '');
+    if (unansweredQuestions.length > 0) {
+      toast.warning("Please answer all questions before submitting.");
+      return;
+    }
+  
+    try {
+      // Show loading toast
+      const loadingToastId = toast.loading("Submitting your responses...");
+      
+      // Format responses as a JSON object with question text as keys
+      const formattedResponses = {};
+      questions.forEach(question => {
+        formattedResponses[question.question] = responses[question.id];
+      });
+      
+      // Create a single record with all responses in the survey_data field
+      await directus.request(
+        createItem("survey_response", {
+          survey_data: formattedResponses
+        })
+      );
+      
+      // Update loading toast to success
+      toast.update(loadingToastId, { 
+        render: "Survey submitted successfully!", 
+        type: "success", 
+        isLoading: false,
+        autoClose: 5000
+      });
+      
+      // Clear responses after successful submission
+      setResponses({});
+    } catch (error) {
+      console.error("Error submitting survey:", error);
+      toast.error("Failed to submit survey. Please try again.");
+    }
+  };
+  
+
+  return (
+    <div className="survey-form">
+      <ToastContainer position="top-right" autoClose={5000} />
+      <div className="survey-heading"><h2>Survey Form</h2></div>
+
+      {loading ? (
+        <p>Loading questions...</p>
+      ) : (
+        <form onSubmit={handleSubmit}>
+            {questions.length > 0 ? (
+                questions.map((question, index) => (
+                <div key={question.id} className="question-row">
+                    <label className="question-label">
+                    Q-{index + 1}: {question.question}
+                    </label>
+                    <textarea
+                        placeholder="Type your response here..."
+                        value={responses[question.id] || ""}
+                        onChange={(e) => handleResponseChange(question.id, e.target.value)}
+                        className="question-input resizable-textarea"
+                    />
+                </div>
+                ))
+            ) : (
+                <p>No questions available.</p>
+            )}
+
+            <div className="buttonGroup">
+            <button type="submit" className="submit-button">
+                Submit
+            </button>
+            <button type="button" className="close-button" onClick={closeModal}>Close</button>
+
+            </div>
+            
+            
+        </form>
+
+      )}
+    </div>
+  );
+}
+
+export default SurveyForm;
+
+
+
+
+
+// CSS page starts here
+
+
+
+.question-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .question-label {
+    flex: 0 0 200px;
+    font-weight: bold;
+    margin-right: 15px;
+    
+  }
+  
+  .question-input {
+    flex: 1;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    height: 25px;
+  }
+
+  .resizable-textarea {
+    resize: both;
+    overflow: auto;
+    min-height: 100px;
+    min-width: 200px;
+  }
+  
+  
+  .submit-button{
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: yellow;
+    border: none;
+    border-radius: 5px;
+  }
+
+  .close-button{
+    margin-left: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: yellow;
+    border: none;
+    border-radius: 5px;
+  }
+
+  .buttonGroup {
+    margin-top: 20px;
+
+}
+  .close-button:hover{
+    background-color: rgb(66, 245, 46);
+  }
+
+  
+  .submit-button:hover{
+    background-color: rgb(66, 245, 46);
+  }
+
+  .survey-heading{
+    text-align: center;
+    font-family: Georgia, 'Times New Roman', Times, serif
+  }
+
+  

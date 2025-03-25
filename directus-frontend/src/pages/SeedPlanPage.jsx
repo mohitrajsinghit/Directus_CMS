@@ -5,7 +5,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./SeedPlanPage.css";
 
-// Initialize Directus client correctly
 const directus = createDirectus("http://localhost:8055").with(rest());
 
 function SeedPlanPage({ closeModal }) {
@@ -15,34 +14,22 @@ function SeedPlanPage({ closeModal }) {
   const [businessUnitOptions, setBusinessUnitOptions] = useState([]);
   const [seedSourceOptions, setSeedSourceOptions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [notification, setNotification] = useState(null);
+  const [tasksComplete, setTasksComplete] = useState(false);
+  const [setPolling] = useState(false);
+  const [setIsSeedOpen] = useState(false); 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
+        const [businessUnitsResponse, seedSourcesResponse] = await Promise.all([
+          directus.request(readItems("business_units", { fields: ["id", "name"] })),
+          directus.request(readItems("seed_sources", { fields: ["id", "name"] }))
+        ]);
         
-        // Fetch business units
-        const businessUnitsResponse = await directus.request(
-          readItems("business_units", { 
-            fields: ["id", "name"] 
-          })
-        );
-        
-        // Fetch seed sources
-        const seedSourcesResponse = await directus.request(
-          readItems("seed_sources", { 
-            fields: ["id", "name"] 
-          })
-        );
-        
-        // Check if data exists and set state
-        if (businessUnitsResponse) {
-            setBusinessUnitOptions(businessUnitsResponse);
-          }
-        
-          if (seedSourcesResponse) {
-            setSeedSourceOptions(seedSourcesResponse);
-          }
+        setBusinessUnitOptions(businessUnitsResponse || []);
+        setSeedSourceOptions(seedSourcesResponse || []);
       } catch (error) {
         console.error("Error fetching data from Directus:", error);
         toast.error("Error fetching data from Directus");
@@ -55,7 +42,7 @@ function SeedPlanPage({ closeModal }) {
   }, []);
 
   const pollTaskInstances = async (dagRunId) => {
-    const interval = 5000; // Polling interval (5 seconds)
+    const interval = 5000; // 5 seconds
     const endpoint = `http://localhost:8080/api/v1/dags/mfp_seeding_from_previous_dataset/dagRuns/${dagRunId}/taskInstances`;
 
     const fetchTaskInstances = async () => {
@@ -64,28 +51,28 @@ function SeedPlanPage({ closeModal }) {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": "Basic " + btoa("airflow:airflow"),
+            Authorization: "Basic " + btoa("airflow:airflow"),
           },
         });
 
-        if (response.ok) {
-          const data = await response.json();
-          const allSuccessful = data.task_instances.every(
-            (task) => task.state === "success"
-          );
+        if (!response.ok) throw new Error(`Error: ${response.statusText}`);
 
-          if (allSuccessful) {
-            toast.success("All tasks completed successfully!");
-          } else {
-            setTimeout(fetchTaskInstances, interval); // Continue polling
-          }
+        const data = await response.json();
+        const allSuccessful = data.task_instances.every(
+          (task) => task.state === "success"
+        );
+
+        if (allSuccessful) {
+          setTasksComplete(true);
+          setNotification("Seeding Plan successfully!");
+          setPolling(false);
         } else {
-          console.error("Error fetching task instances:", response.statusText);
-          toast.error("Error fetching task instances");
+          setTimeout(fetchTaskInstances, interval);
         }
       } catch (err) {
         console.error("Error during task instance polling:", err);
-        toast.error("Error during task instance polling");
+        toast.error("Task polling failed. Please try again.");
+        setPolling(false);
       }
     };
 
@@ -94,39 +81,48 @@ function SeedPlanPage({ closeModal }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!businessUnit || !seedSource) {
+      toast.error("Please fill in all required fields.");
+      return;
+    }
 
-    const formData = { 
-      version, 
-      businessUnit, 
-      seedSource 
-    };
+    setLoading(true);
+    const formData = { version, businessUnit, seedSource };
 
     try {
       const response = await fetch(
         "http://localhost:8080/api/v1/dags/mfp_seeding_from_previous_dataset/dagRuns",
         {
-        method: "POST",
-        headers: {
+          method: "POST",
+          headers: {
             "Content-Type": "application/json",
             Authorization: "Basic " + btoa("airflow:airflow"),
-        },
-        body: JSON.stringify({ conf: formData }),
+          },
+          body: JSON.stringify({ conf: formData }),
         }
       );
 
-      if (response.ok) {
-        const result = await response.json();
-        toast.success(`DAG triggered successfully! Run ID: ${result.dag_run_id}`);
-        pollTaskInstances(result.dag_run_id); // Start monitoring tasks
-      } else {
-        const error = await response.json();
-        toast.error(`Error: ${error.detail}`);
-      }
+      if (!response.ok) throw new Error("Failed to trigger DAG");
+
+      const result = await response.json();
+      toast.success("DAG Triggered successfully!");
+      setPolling(true);
+      pollTaskInstances(result.dag_run_id);
     } catch (err) {
       console.error("Error triggering DAG:", err);
-      toast.error("An error occurred while triggering the DAG.");
+      toast.error("DAG Trigger unsuccessful!");
+    } finally {
+      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (tasksComplete) {
+      toast.success(notification);
+      setTasksComplete(false);
+      setIsSeedOpen(false);
+    }
+  }, [tasksComplete, notification]);
 
   return (
     <div className="formContainer">
@@ -154,13 +150,9 @@ function SeedPlanPage({ closeModal }) {
               onChange={(e) => setBusinessUnit(e.target.value)}
               className="formSelect"
             >
-              <option value="" disabled>
-                Select Business Unit
-              </option>
-              {Array.isArray(businessUnitOptions) && businessUnitOptions.map((unit) => (
-                <option key={unit.id} value={unit.name}>
-                  {unit.name}
-                </option>
+              <option value="" disabled>Select Business Unit</option>
+              {businessUnitOptions.map((unit) => (
+                <option key={unit.id} value={unit.name}>{unit.name}</option>
               ))}
             </select>
           </div>
@@ -172,35 +164,21 @@ function SeedPlanPage({ closeModal }) {
               onChange={(e) => setSeedSource(e.target.value)}
               className="formSelect"
             >
-              <option value="" disabled>
-                Select Seed Source
-              </option>
-              {Array.isArray(seedSourceOptions) && seedSourceOptions.map((source) => (
-                <option key={source.id} value={source.name}>
-                  {source.name}
-                </option>
+              <option value="" disabled>Select Seed Source</option>
+              {seedSourceOptions.map((source) => (
+                <option key={source.id} value={source.name}>{source.name}</option>
               ))}
             </select>
           </div>
 
           <div className="buttonGroup">
-            <button type="submit" className="submitButton">
-              Submit
-            </button>
-            <button
-              type="reset"
-              className="resetButton"
-              onClick={() => {
-                setVersion("Test Version");
-                setBusinessUnit("");
-                setSeedSource("");
-              }}
-            >
-              Reset
-            </button>
-            <button type="button" className="closeButton" onClick={closeModal}>
-              Close
-            </button>
+            <button type="submit" className="submitButton">Submit</button>
+            <button type="reset" className="resetButton" onClick={() => {
+              setVersion("Test Version");
+              setBusinessUnit("");
+              setSeedSource("");
+            }}>Reset</button>
+            <button type="button" className="closeButton" onClick={closeModal}>Close</button>
           </div>
         </form>
       )}
@@ -209,6 +187,7 @@ function SeedPlanPage({ closeModal }) {
 }
 
 export default SeedPlanPage;
+
 
 
 // pages/SeedPlanPage.jsx
