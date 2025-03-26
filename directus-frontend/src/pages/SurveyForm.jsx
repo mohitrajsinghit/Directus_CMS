@@ -19,7 +19,7 @@
 //         setLoading(true);
 //         const response = await directus.request(
 //           readItems("survey_questions", {
-//             fields: ["id", "question"],
+//             fields: ["id", "questions "],
 //           })
 //         );
 //         console.log("Fetched questions:", response); 
@@ -41,7 +41,7 @@
 //   };
 
 
-// const handleSubmit = async (e) => {
+//   const handleSubmit = async (e) => {
 //     e.preventDefault();
     
 //     // Check if all questions have responses
@@ -58,7 +58,8 @@
 //       // Format responses as a JSON object with question text as keys
 //       const formattedResponses = {};
 //       questions.forEach(question => {
-//         formattedResponses[question.question] = responses[question.id];
+//         // Use the correct field name here - 'questions' instead of 'question'
+//         formattedResponses[question.questions] = responses[question.id];
 //       });
       
 //       // Create a single record with all responses in the survey_data field
@@ -84,6 +85,7 @@
 //     }
 //   };
   
+  
 
 //   return (
 //     <div className="survey-form">
@@ -92,25 +94,25 @@
 
 //       {loading ? (
 //         <p>Loading questions...</p>
-//       ) : (
-//         <form onSubmit={handleSubmit}>
-//             {questions.length > 0 ? (
-//                 questions.map((question, index) => (
-//                 <div key={question.id} className="question-row">
-//                     <label className="question-label">
-//                     Q-{index + 1}: {question.question}
-//                     </label>
-//                     <textarea
-//                         placeholder="Type your response here..."
-//                         value={responses[question.id] || ""}
-//                         onChange={(e) => handleResponseChange(question.id, e.target.value)}
-//                         className="question-input resizable-textarea"
-//                     />
-//                 </div>
-//                 ))
-//             ) : (
-//                 <p>No questions available.</p>
-//             )}
+//               ) : (
+//                 <form onSubmit={handleSubmit}>
+//                     {questions.length > 0 ? (
+//           questions.map((question, index) => (
+//             <div key={question.id} className="question-row">
+//               <label className="question-label">
+//                 Q-{index + 1}: {question.questions}
+//               </label>
+//               <textarea
+//                 placeholder="Type your response here..."
+//                 value={responses[question.id] || ""}
+//                 onChange={(e) => handleResponseChange(question.id, e.target.value)}
+//                 className="question-input resizable-textarea"
+//               />
+//             </div>
+//           ))
+//         ) : (
+//           <p>No questions available.</p>
+//         )}
 
 //             <div className="buttonGroup">
 //             <button type="submit" className="submit-button">
@@ -128,12 +130,7 @@
 //   );
 // }
 
-
-  
-
 // export default SurveyForm;
-
-
 
 
 

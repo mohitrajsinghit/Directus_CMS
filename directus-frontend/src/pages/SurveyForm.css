@@ -66,7 +66,22 @@
 
 
 
-   .submit-button{
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ .submit-button{
     padding: 10px 20px;
     cursor: pointer;
     background-color: yellow;
@@ -94,7 +109,7 @@
   .submit-button:hover{
     background-color: rgb(66, 245, 46);
   }
-
+ 
 
 
    /* PlannedMarginTable.css */
@@ -147,6 +162,8 @@
   
 
   /* Editable cell styles */
+
+
   .cell-content {
     cursor: pointer;
   }
@@ -191,4 +208,4 @@
     background-color: #dc3545;
     color: white;
   }
-  
+    

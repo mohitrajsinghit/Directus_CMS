@@ -15,6 +15,8 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
         
         // Fetch all menu sections
         const sections = await fetchMenuSections();
+
+        sections.sort((a, b) => a.order - b.order) //for displaying the menuitems in correct order.
         
         // For each section, fetch its menu items
         const sectionsWithItems = await Promise.all(

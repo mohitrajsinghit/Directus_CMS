@@ -44,6 +44,7 @@ function Navbar() {
           <button
             className="seed-button"
             onClick={() => openModal(<SeedPlanPage closeModal={closeModal} />)}
+
           >
             Seed
           </button>

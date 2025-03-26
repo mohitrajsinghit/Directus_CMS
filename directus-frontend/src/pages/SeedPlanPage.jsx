@@ -16,8 +16,9 @@ function SeedPlanPage({ closeModal }) {
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(null);
   const [tasksComplete, setTasksComplete] = useState(false);
-  const [setPolling] = useState(false);
-  const [setIsSeedOpen] = useState(false); 
+  const [, setPolling] = useState(false);
+  const [, setIsSeedOpen] = useState(false);``
+
 
   useEffect(() => {
     const fetchData = async () => {

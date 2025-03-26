@@ -1,4 +1,3 @@
-// App.jsx
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { DirectusProvider } from "./context/DirectusContext";
@@ -26,7 +25,7 @@ function App() {
           <main
             style={{
               flex: 1,
-              backgroundColor: "#000",
+              backgroundColor:"#e0eef5",
               color: "#fff",
               padding: "1rem",
               transition: "margin-left 0.3s ease",

@@ -4,7 +4,7 @@
   align-items: center;
   padding: 0.5rem;
   height: 40px;
-  background-color: #039f9f; /* Change color as needed */
+  background-color: #3e6fff ; /* Change color as needed    #039f9f */
   color: #ffffff; /* Change text color as needed */
 }
 
@@ -33,7 +33,7 @@
 
 .sidebar {
     width: 250px; /* Default width */
-    background-color: #5829ce;
+    background-color: #F4F4F4;
     color: #fff;
     padding: 1rem;
     transition: width 0.3s ease;
@@ -44,7 +44,7 @@
   
   /* Collapse button styles */
   .collapse-button {
-    background-color: #3bdddf;
+    background-color: #3e6fff;
     color: #000000;
     border: none;
     padding: 0.5rem;
@@ -53,10 +53,11 @@
     border-radius: 10%;
     text-align: center;
     margin-bottom: 1rem;
+    border: #3a3a3a solid 1px;
   }
 
   .collapse-button:hover{
-    background-color: rgb(66, 245, 46);
+    background-color: #4ca0fa;
   }
 
   
@@ -68,7 +69,7 @@
 
   
   .survey-button{
-    background-color: #e6f42f;
+    background-color: #AEEEEE;
     color: #000000;
     border: none;
     border-radius: 10%;
@@ -78,12 +79,12 @@
   }
 
   .survey-button:hover{
-    background-color: rgb(66, 245, 46);
+    background-color: #E0FFFF;
   }
 
 
   .seed-button{
-    background-color: #e6f42f;
+    background-color: #AEEEEE;
     color: #000000;
     border: none;
     padding: 0.5rem;
@@ -97,25 +98,26 @@
   
 
   .seed-button:hover{
-    background-color: rgb(66, 245, 46);
+    background-color: #E0FFFF;
   }
 
 
   /* Title styles */
   .sidebar-title {
+    margin-top: 1px;
     height: 35px;
     display: flex;
     justify-content: center; 
     align-items: center;
-    background-color: #3bdddf;
+    background-color: #3e6fff;
     font-size: 18px;
     font-weight: 20xp;
     margin-bottom: 1rem;
-    
     color: #000;
-    border: #3a3a3a solid 2px;
+    border: #3a3a3a solid 1px;
     border-radius: 10px;
   }
+
   
   /* Menu list styles */
   .menu-list {
@@ -136,15 +138,15 @@
     width: 100%;
     background-color: transparent;
     border: none;
-    color: #fff;
+    color: #5f4c4c;
     cursor: pointer;
     padding: 0.7rem;
-    border: #f4d03f solid 2px;
+    border: #683e2a solid 1px;
     border-radius: 15px;
   }
 
   .section-button:hover{
-    background-color: #d564dd;
+    background-color: #e0eef5;
   }
 
   
@@ -155,10 +157,11 @@
     margin-top: 10px;
   }
   
+
   .submenu-item {
     margin-bottom: 0.5rem;
     padding: 0.7rem;
-    border: #f4d03f solid 2px;
+    border: #683e2a solid 1px;
     border-radius: 15px;
     display: inline-block;
     width: 87%;
@@ -167,7 +170,7 @@
   }
   
   .submenu-item a {
-    color: #fff;
+    color: #5f4c4c;
     text-decoration: none;
     display: block;
     width: 100%;
@@ -175,13 +178,10 @@
   }
   
   .submenu-item:hover {
-    background-color: #d564dd;
+    background-color: #e0eef5;
   }
   
-  .submenu-item:hover a {
-    color: #fff; 
-  }
-  
+
   .collapsed {
     width: 40px;
   }
